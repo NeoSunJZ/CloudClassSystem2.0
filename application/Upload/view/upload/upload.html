@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dream</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="{$Think.config.web_res_root}assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">  
+     <!-- Morris Chart Styles-->
+   
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+    <link href="{$Think.config.web_res_root}assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="{$Think.config.web_res_root}assets/js/common/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <style type="text/css">
+        body{background-color:transparent;}
+        .btn{width:70px;
+             text-align: left;}
+    </style>
+</head>
+
+<body onload="time()">
+    <!-- /. NAV SIDE  -->
+            <div id="page-inner">
+             <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            <img style="float:left; margin:0px 10px 0px 0px;" src="{$Think.config.web_res_root}assets/Images/Upload.png" width="128" height="128" />
+                            <div style="padding-top:20px;">
+                            <strong>请提交您的实验报告/课堂作业</strong>
+                            <small><br />注意：在截止日期前，您可以随意下载您的历史版本或提交新的版本。<br />
+                            截止日期后，服务器将提交您的最后一次作业！您的作业文件在截止后服务器默认保存时间为15天！</small>
+                            </div>
+                        </h1>
+                    </div>
+                </div> 
+                 <!-- /. ROW  -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger">
+                        <strong><i class="fa fa-exclamation-triangle"></i> 当前服务器时间为:</strong><span id="showtime"></span>
+                    </div>
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            亲爱的{$department}{$classroom}，{$truename}童鞋，您的作业列表如下:
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>作业序号</th>
+                                            <th>作业标题</th>
+                                            <th>所属科目</th>
+                                            <th>发布任务时间</th>
+                                            <th>截止上交时间</th>
+                                            <th>当前状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {volist name="Homeworklist" id="list"}
+                                        <tr class="odd gradeX">
+                                            <td>{$list.id}</td>
+                                            <td>{$list.title}</td>
+                                            <td>{$list.BelongSubject}</td>
+                                            <td class="center">{$list.CreateTime}</td>
+                                            <td class="center">{$list.Deadline}</td>
+                                            <td class="center">{$list.State}</td>
+                                            <td class="center" style="text-align: center;">{$list.function}</td>
+                                        </tr>
+                                        {/volist}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+        </div>
+        <footer><p>中南ECHO软件开发工作室 版权所有©2017-2018 技术支持电话：13305356699</p></footer>
+    <!-- JS Scripts-->
+    <script type="text/javascript">
+        $(window.parent.document).find("#iframe").load(function () {
+        var main = $(window.parent.document).find("#iframe");
+        var thisheight = $(document).height() + 30;
+        main.height(thisheight);
+    </script>
+    <!-- jQuery Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="{$Think.config.web_res_root}assets/js/common/dataTables/jquery.dataTables.js"></script>
+    <script src="{$Think.config.web_res_root}assets/js/common/dataTables/dataTables.bootstrap.js"></script>
+
+
+        <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+            });
+    </script>
+    <script language=Javascript> 
+        function time(){
+            t_div = document.getElementById('showtime');
+            var now=new Date()
+            t_div.innerHTML = "  "+now.getFullYear()
+                                +"年"+(now.getMonth()+1)+"月"+now.getDate()
+                                +"日"+now.getHours()+"时"+now.getMinutes()
+                                +"分"+now.getSeconds()+"秒";
+            //等待一秒钟后调用time方法，由于settimeout在time方法内，所以可以无限调用
+            setTimeout(time,1000);
+            }
+    </script>
+         <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    <script src="{$Think.config.web_res_root}assets/js/common/custom-scripts.js"></script>
+</body>
+</html>

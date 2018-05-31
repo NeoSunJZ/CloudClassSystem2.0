@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dream</title>
+    <!-- Bootstrap Styles-->
+    <link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+     <!-- FontAwesome Styles-->
+    <link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">  
+    <!-- Custom Styles-->
+    <link href="{$Think.config.web_res_root}assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- TABLE STYLES-->
+    <link href="{$Think.config.web_res_root}assets/js/common/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+
+    <style type="text/css">
+        body{background-color:transparent;}
+        #myModal {
+         position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        }
+    </style>
+</head>
+
+<body onload="time();Is_Need();">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="NewTeacher_form" action="{:url('uploadAdmin/donewteacher')}" method="post">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    新增学科信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>教授学科</label>
+                            <input class="form-control" name="Lesson" placeholder="示例:数据结构(郁松)">
+                        </div>
+                        <div class="form-group">
+                            <label>所属学院(不可改变)</label>
+                            <input class="form-control" name="Department" value="{$department}" readonly="">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>教师姓名</label>
+                            <input class="form-control" name="Name" placeholder="示例:郁松">
+                        </div>
+                        <div class="form-group">
+                            <label>教师邮箱</label>
+                            <input class="form-control" name="Email" placeholder="示例:ys@csu.edu.cn">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    提交更改
+                </button>
+            </div>
+        </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+    </div>
+    <!-- /. NAV SIDE  -->
+            <div id="page-inner">
+             <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            <img style="float:left; margin:0px 10px 0px 0px;" src="{$Think.config.web_res_root}assets/Images/Upload.png" width="128" height="128" />
+                            <div style="padding-top:20px;">
+                            <strong>实验报告/课堂作业发布向导</strong>
+                            <small><br />通过此向导，您可十分方便的发布任意类型的作业并实时获知作业上交情况<br />
+                            摆脱收作业难题，这很简单！</small>
+                            </div>
+                        </h1>
+                    </div>
+                </div> 
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        <strong><i class="fa fa-exclamation-triangle"></i> 当前服务器时间为:</strong><span id="showtime"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            新增一项作业
+                        </div>
+                        <div class="panel-body">
+                            <form role="form" id="NewHomework_form" action="{:url('uploadAdmin/donewupload')}" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>基本信息概述</h4>
+                                        <div class="form-group">
+                                            <label>作业标题</label>
+                                            <input class="form-control" name="title" placeholder="请填写作业标题" id="title">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>所属学院(不可改变)</label>
+                                                    <select class="form-control" name="department" readonly="">
+                                                        <option>{$department}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>所属班级(不可改变)</label>
+                                                    <select class="form-control" name="classroom" readonly="">
+                                                        <option>{$classroom}</option>
+                                                    </select>
+                                                    *本班级学习委员仅可发布本班作业！
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>所属学科</label>
+                                            <select class="form-control" name="Lesson" onchange="Is_AddTeacher()" id="select1">
+                                                {volist name="Subject" id="list"}
+                                                <option>{$list.Lesson}</option>
+                                                {/volist}
+                                                <option value="Add"><--添加新的科目--></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>作业截止时间</label>
+                                            <input class="form-control" type="datetime-local" name="deadline" id="deadline">
+                                            *若您未指定截止上交具体时刻，则一律以当天24时为准！
+                                        </div>
+                                        <div class="form-group">
+                                            <label>作业具体要求</label>
+                                            <textarea class="form-control" rows="4" name="content">无</textarea>
+                                            *无具体要求可不填写
+                                        </div>
+                                        <div class="alert alert-danger" id="ShowCheakAllbox"><div id="ShowCheakAll"></div></div>
+                                        <INPUT class="btn btn-success pull-right" id="back_btn" onclick="checkAll()" type="button" value="当然要确认发布"/>
+                                        <INPUT class="btn btn-info pull-left" id="back_btn" onclick="history.go(-1)" type="button" value="算了我不发布啦"/>
+                                        <div class="pull-left" style="padding-left: 10px;">&nbsp;</div>
+                                        <INPUT class="btn btn-info pull-left" id="back_btn" type="reset" value="乱套啦我要重填"/>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-md-6">
+                                    <h4>附件或实例上传</h4>
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                        <label>作业附件</label>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="1" name="Is_Need_Attachment" id="Is_Need_Attachment" onchange="Is_Need()">作业需要上传附件
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="AttachmentBox">
+                                                <label>作业附件上传</label>
+                                                <input type="file" name="Attachment" id="Attachment">
+                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>作业实例</label>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" value="1" name="Is_Need_Example" id="Is_Need_Example" onclick="Is_Need()">作业需要上传实例
+                                                </label>
+                                        </div>
+                                        <div class="form-group" id="ExampleBox"> 
+                                            <label>作业示例上传</label>
+                                            <input type="file" name="Example" id="Example">
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <h4>上传文件名设置</h4>
+                                        <div class="form-group">
+                                            <label>作业命名设置(测试功能)</label>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                *请在下方使用数字1-6和0指出文件名的构成出现顺序，例如您需要的文件名为软件学院1702班_3901170224_孙家正.rar，您需要在下方学号、学院+班级、学生真实姓名处依次填入2、1、3。在其余不需出现的字段填写0,并在连接字段方式中选择下划线。(若您不更改此设置，将采取默认值。)
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="FileNameSID" id="N-SID" value="1" onblur="viewName()">
+                                                    学号
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="FileNameDC" id="N-DC" value="2" onblur="viewName()">
+                                                    学院+班级
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="FileNameN" id="N-N" value="3" onblur="viewName()">
+                                                    学生真实姓名
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="FileNameV" id="N-V" value="4" onblur="viewName()">
+                                                    作业版本号
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="FileNameT" id="N-T" value="0" onblur="viewName()">
+                                                    作业标题
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" name="FileNameHID" id="N-HID" value="0" onblur="viewName()">
+                                                    作业发布序号
+                                                </div>
+                                                <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>文件名连接方式</label>
+                                                    <select class="form-control" id="N-C" name="FileNameC" onchange="viewName()">
+                                                        <option value="_">下划线 [ _ ]</option>
+                                                        <option value=" ">空  格 [   ]</option>
+                                                        <option value="-">短横线 [ - ]</option>
+                                                    </select>
+                                                </div>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <fieldset disabled="">
+                                                    <div class="form-group">
+                                                        <label>文件名实例预览</label>
+                                                        <input class="form-control" id="view">
+                                                    </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <h4>作业上传设置</h4>
+                                        <div class="row">
+                                        <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>无需上交作业的同学学号</label>
+                                            <input class="form-control" name="Unwanted_Student" placeholder="请以/分割不同学号">
+                                            *默认留空为全员需要上交作业。
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                            <label>允许上传文件类型</label>
+                                            <div class="row">
+                                            <div class="col-md-2">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="rar_zip">rar/zip
+                                            </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="doc_docx">doc/docx
+                                            </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="xls_xlsx">xls/xlsx
+                                            </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="ppt_pptx">ppt/pptx
+                                            </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="png_jpg">png/jpg
+                                            </label>
+                                            </div>
+                                            <div class="col-md-2">
+                                            <label class="checkbox-inline">
+                                                        <input type="checkbox" id="other"><input class="form-control" id="other-write">
+                                                        <input type="text" hidden="hidden" name="type" id="filetype">
+                                            </label>
+                                        </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>大小限制</label>
+                                        <div class="form-group input-group">
+                                            <input type="text" class="form-control" value="10" name="limit">
+                                            <span class="input-group-addon">MB</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            </form>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+        <footer><p>中南ECHO软件开发工作室 版权所有©2017-2018 技术支持电话：13305356699</p></footer>
+    <!-- JS Scripts-->
+    <script type="text/javascript">
+        $(window.parent.document).find("#iframe").load(function () {
+        var main = $(window.parent.document).find("#iframe");
+        var thisheight = $(document).height() + 30;
+        main.height(thisheight);
+    </script>
+    <!-- jQuery Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="{$Think.config.web_res_root}assets/js/common/dataTables/jquery.dataTables.js"></script>
+    <script src="{$Think.config.web_res_root}assets/js/common/dataTables/dataTables.bootstrap.js"></script>
+
+
+    <script>
+            $(document).ready(function () {
+                $('#dataTables-example').dataTable();
+                $("#ShowCheakAllbox").hide();
+                viewName();
+            });
+    </script>
+    <script type="text/javascript">
+        function Is_AddTeacher(){
+            if($('#select1').val()=="Add"){
+                $('#myModal').modal('show')
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function Is_Need(){
+            if($("#Is_Need_Attachment").prop('checked'))
+            {
+                $("#AttachmentBox").show();
+            }else{
+                $("#AttachmentBox").hide();
+            }
+            if($("#Is_Need_Example").prop('checked'))
+            {
+                $("#ExampleBox").show();
+            }else{
+                $("#ExampleBox").hide();
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        function viewName(){
+            if($("#N-V").val()!=0)
+            {
+            var array = [
+                ['3901170224',$("#N-SID").val()],
+                ['软件工程1702班',$("#N-DC").val()],
+                ['孙家正',$("#N-N").val()],
+                ['5',$("#N-V").val()],
+                ['Java第三次作业',$("#N-T").val()],
+                ['8',$("#N-HID").val()]
+            ];
+            array.sort(function(a,b){return a[1]-b[1]});
+            var str="";
+            if($("#N-C").val()=="_")
+            {
+                var c="_";
+            }else if($("#N-C").val()==" "){
+                var c=" ";
+            }else if($("#N-C").val()=="-"){
+                var c="-";
+            }
+            for(var i=0;i<6;i++){
+                if(array[i][1]!=0)
+                    str=str+array[i][0]+c;
+            }
+            str = str.substr(0,str.length-1);
+            $('#view').val(str);
+        }else{
+            $('#view').val("ERROR:版本号是必须要素！");
+        }
+        }
+    </script>
+    <script language=Javascript> 
+        function time(){
+            t_div = document.getElementById('showtime');
+            var now=new Date()
+            t_div.innerHTML = "  "+now.getFullYear()
+                                +"年"+(now.getMonth()+1)+"月"+now.getDate()
+                                +"日"+now.getHours()+"时"+now.getMinutes()
+                                +"分"+now.getSeconds()+"秒";
+            //等待一秒钟后调用time方法，由于settimeout在time方法内，所以可以无限调用
+
+            setTimeout(time,1000);
+            }
+    </script>
+    <script type="text/javascript">
+        function checkAll(){
+            var str="";
+            if ($("#rar_zip").prop('checked'))
+                str=str+"rar,zip"+",";
+            if ($("#doc_docx").prop('checked'))
+                str=str+"doc,docx"+",";
+            if ($("#xls_xlsx").prop('checked'))
+                str=str+"xls,xlsx"+",";
+            if ($("#ppt_pptx").prop('checked'))
+                str=str+"ppt,pptx"+",";
+            if ($("#png_jpg").prop('checked'))
+                str=str+"png,jpg"+",";
+            if ($("#other").prop('checked'))
+                str=str+$("#other-write").val();
+            if(str=="")
+            {
+            $("#ShowCheakAll").html('<span class="error glyphicon glyphicon-remove-circle"></span><span class="error"> 必须提供允许上传文件类型!</span>');
+            $("#ShowCheakAllbox").show();
+            return false;
+            }else{
+                $("#filetype").val(str);
+            }
+        if($("#title").val()==''){
+            $("#ShowCheakAll").html('<span class="error glyphicon glyphicon-remove-circle"></span><span class="error"> 标题不能为空!</span>');
+            $("#ShowCheakAllbox").show();
+            return false;
+        }else
+        if($("#deadline").val()==''){
+            $("#ShowCheakAll").html('<span class="error glyphicon glyphicon-remove-circle"></span><span class="error"> 截止时间不能为空!</span>');
+            $("#ShowCheakAllbox").show();
+            return false;
+        }else
+        if($("#N-SID").val()==''||$("#N-DC").val()==''||$("#N-N").val()==''||$("#N-V").val()==''||$("#N-T").val()==''||$("#N-HID").val()=='')
+        {
+            $("#ShowCheakAll").html('<span class="error glyphicon glyphicon-remove-circle"></span><span class="error"> 名称排序不能有的为空！</span>');
+            $("#ShowCheakAllbox").show();
+                return false;
+        }else if($("#N-SID").val()>6||$("#N-DC").val()>6||$("#N-N").val()>6||$("#N-V").val()>6||$("#N-T").val()>6||$("#N-HID").val()>6)
+            {
+            $("#ShowCheakAll").html('<span class="error glyphicon glyphicon-remove-circle"></span><span class="error"> 呃，名称排序都能超过六我就不理解了！</span>');
+            $("#ShowCheakAllbox").show();
+                return false;
+            }
+        else{
+            $("#ShowCheakAllbox").hide();
+            $('#NewHomework_form').submit();
+            return true;
+        }
+    }
+    </script>
+         <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    <script src="{$Think.config.web_res_root}assets/js/common/custom-scripts.js"></script>
+</body>
+</html>

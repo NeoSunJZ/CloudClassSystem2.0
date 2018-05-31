@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dream</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="{$Think.config.web_res_root}assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">  
+     <!-- Morris Chart Styles-->
+   
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+    <link href="{$Think.config.web_res_root}assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="{$Think.config.web_res_root}assets/js/common/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <style type="text/css">
+        body{background-color:transparent;}
+        .files{
+        text-align:center;
+        padding:6px 10px; 
+        border-radius:2px;
+        font-family:微软雅黑;
+        font-size:12px;
+        text-decoration:none;
+        border:none;
+        }
+    </style>
+</head>
+
+<body onload="time()">
+    <!-- /. NAV SIDE  -->
+            <div id="page-inner">
+             <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            <img style="float:left; margin:0px 10px 0px 0px;" src="{$Think.config.web_res_root}assets/Images/Upload.png" width="128" height="128" />
+                            <div style="padding-top:20px;">
+                            <strong>请提交您的实验报告/课堂作业</strong>
+                            <small><br />注意：在截止日期前，您可以随意下载您的历史版本或提交新的版本。<br />
+                            截止日期后，服务器将提交您的最后一次作业！您的作业文件在截止后服务器默认保存时间为15天！</small>
+                            </div>
+                        </h1>
+                    </div>
+                </div> 
+                 <!-- /. ROW  -->
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="panel panel-default">
+                        <div class="panel-heading">
+                            {$title} 的作业简报
+                        </div>
+                        <div class="panel-body">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#home" data-toggle="tab">作业详情</a>
+                                </li>
+                                <li class=""><a href="#profile" data-toggle="tab">作业相关要求</a>
+                                </li>
+                                <li class=""><a href="#messages" data-toggle="tab">相关附件</a>
+                                </li>
+                                <li class=""><a href="#settings" data-toggle="tab">作业范例</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="home">
+                                    <h4>作业详情</h4>
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <tr>   
+                                            <td>作业名称：</td>
+                                            <td>{$title}</td>
+                                            <td>作业所属学科：</td>
+                                            <td>{$BelongSubject}</td>
+                                            <td>作业发布者：</td>
+                                            <td>{$CreateUser}</td>
+                                            <td>作业发布时间：</td>     
+                                            <td>{$CreateTime}</td>
+                                        </tr>
+                                    </table>
+                                        <div class="alert alert-info">
+                                            <strong><i class="fa fa-exclamation-triangle"></i></strong> 注意
+                                            <br/>1. 作业截止时间：<strong>{$Deadline}</strong>,在作业截止时间后，将<strong>无法</strong>继续提交您的作业！
+                                            <br/>2. 本次作业<strong> {$Is_Need_Attachment} </strong>相关附件，该附件可能与作业内容有关或需要作业使用该附件完成，请您注意！
+                                            <br/>3. 为确保教学质量，本次作业<strong> {$Is_Need_Example} </strong>相关例程，请您注意!
+
+                                        </div>
+                                </div>
+                                <div class="tab-pane fade" id="profile">
+                                    <h4>作业相关要求</h4>
+                                    <div class="alert alert-danger">
+                                        <strong><i class="fa fa-exclamation-triangle"></i>作业有如下要求</strong><br/>
+                                        1. 作业截止时间是<strong>{$Deadline}</strong>,在作业截止时间后，将自动以您最后一次提交的作业为准提交服务器。若您忘记提交，则<strong>无法</strong>继续提交您的作业！<br/>
+                                        2.这是{$BelongSubject}的{$title}，请在提交前确认所交作业是否正确。<br/>
+                                        3.请注意：{$content}。
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="messages">
+                                    <h4>相关附件</h4>
+                                    <div class="alert alert-success">
+                                            <strong><i class="fa fa-exclamation-triangle"></i></strong> 注意
+                                            <br/>本次作业<strong> {$Is_Need_Attachment} </strong>相关附件，该附件可能与作业内容有关或需要作业使用该附件完成，请您注意！<br/>
+                                            <div  id="AttachmentDownload">
+                                            <span>(因保证下载文件安全，本系统不支持使用迅雷等下载工具下载！)</span>
+                                            <a href="../../upload/download/download?Hid={$Homeworkid}&&is_Public=2&&P_name={$Attachment}" class="btn btn-success btn-sm pull-right"><i class="fa fa-arrow-circle-down"></i> 下载附件</a><span class="pull-right" style="margin: 5px;">文件名：{$Attachment}  </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="settings">
+                                    <h4>作业范例</h4>
+                                    <div class="alert alert-success">
+                                            <strong><i class="fa fa-exclamation-triangle"></i></strong> 注意
+                                            <br/>为确保教学质量，本次作业<strong> {$Is_Need_Example} </strong>相关范例，请您注意！<br/>
+                                            <div id="ExampleDownload">
+                                            <span>(因保证下载文件安全，本系统不支持使用迅雷等下载工具下载！)</span>
+                                            <a href="../../upload/download/download?Hid={$Homeworkid}&&is_Public=1&&P_name={$Example}" class="text-right btn btn-success btn-sm pull-right"><i class="fa fa-arrow-circle-down"></i> 下载范例</a><span class="pull-right" style="margin: 5px;">文件名：{$Example}  </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Advanced Tables -->
+                    <div id="uploadData">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                上交你的作业
+                            </div>
+                            <div class="panel-body">
+                                <form action="/CloudClass/public/index.php/upload/upload/upload?Homework_id={$Homeworkid}&&ver={$ver}" enctype="multipart/form-data" method="post">
+                                    <div class="form-group">
+                                        <label>当前服务器时间为:</strong><span id="showtime"></span></label>
+                                        <div class="row" id="Upload">
+                                            <div class="col-md-10">
+                                                <input style="width: 70%;" type="file" id="files" name="files" class="files" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a class="btn btn-success btn-sm" onclick="uploadFile()"><i class="fa fa-cloud-upload"> 上传你的作业</i></a>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 5%" id="progressBar"> 0%
+                                            </div>
+                                        </div>
+                                        <div id="states"></div>
+                                    </div>
+                                </form> 
+                             </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            这是您作业的上交情况:
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+
+                                            <th>上交序号</th>
+                                            <th>作业标题</th>
+                                            <th>所属科目</th>
+                                            <th>作业上交时间</th>
+                                            <th>版本代号</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="UploadHomeworkTable">
+                                        {volist name="UploadHomeworkContent" id="list" key="No"}
+                                        <tr class="odd gradeX">
+                                            <td>{$No}</td>
+                                            <td>{$title}</td>
+                                            <td class="center">{$BelongSubject}</td>
+                                            <td class="center">{$list.UploadTime}</td>
+                                            <td class="center">{$list.Version}</td>
+                                            <td class="center" style="text-align: center;">
+                                                <a href="../../upload/download/download?Hid={$Homeworkid}&&Ver={$list.Version}" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-down"></i> 下载作业</a></td>
+                                        </tr>
+                                        {/volist}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Advanced Tables -->
+                </div>
+            </div>
+        </div>
+        <footer><p>中南ECHO软件开发工作室 版权所有©2017-2018 技术支持电话：13305356699</p></footer>
+    <!-- JS Scripts-->
+    <script type="text/javascript">
+        $(window.parent.document).find("#iframe").load(function () {
+        var main = $(window.parent.document).find("#iframe");
+        var thisheight = $(document).height() + 30;
+        main.height(thisheight);
+    </script>
+    <!-- jQuery Js -->
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="{$Think.config.web_res_root}assets/js/common/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="{$Think.config.web_res_root}assets/js/common/dataTables/jquery.dataTables.js"></script>
+    <script src="{$Think.config.web_res_root}assets/js/common/dataTables/dataTables.bootstrap.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#dataTables-example').dataTable();
+    });
+</script>
+         <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    <script src="{$Think.config.web_res_root}assets/js/common/custom-scripts.js"></script>
+    <script type="text/javascript">
+        function uploadFile(){
+            var files = $("#files").get(0).files[0];
+            var formData = new FormData();// FormData对象，来发送二进制文件。
+            formData.append("files" , files);// 将文件追加到 formdata对象中。
+                /** 
+                    * 必须false才会避开jQuery对 formdata 的默认处理 
+                    * XMLHttpRequest会对 formdata 进行正确的处理 
+                */
+            $.ajax({
+                type: "POST",
+                url: "../../../upload/upload/upload?Homework_id={$Homeworkid}&&ver={$ver}",
+                data: formData,
+                processData : false, 
+                //必须false才会自动加上正确的Content-Type 
+                contentType : false,
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    if(data['msg']==" 请选择上传文件"){
+                        $("#states").html("<div class=\"alert alert-warning\"><i class=\"fa fa-exclamation-triangle\"> </i>"+data['msg']+"</div>");
+                        $("#progressBar").html( 0 +" %" );
+                        $("#progressBar").css("width" , 5 +"%");
+                    }else if (data['msg']==" 文件更新成功"||data['msg']==" 文件上传成功") {
+                        $("#states").html("<div class=\"alert alert-success\"><i class=\"fa fa-check-square-o\"> </i>"+data['msg']+"</div>");
+                        $("#UploadHomeworkTable").append("<tr class=\"odd gradeX\"><td colspan=\"6\">您刚刚提交了作业，小的要重新检索数据呢。请单击<a class=\"btn btn-success btn-sm\" onclick=\"window.location.reload()\"><i class=\"fa fa-refresh fa-spin \"></i> 刷新</a>刷新您作业的上交情况！</td></tr>"
+                            );
+                        $("#Upload").hide();
+                    }else{
+                        $("#states").html("<div class=\"alert alert-danger\"><i class=\"fa fa-exclamation-triangle\"> </i>"+data['msg']+"</div>");
+                        $("#progressBar").html( 0 +" %" );
+                        $("#progressBar").css("width" , 5 +"%");
+                    }
+                },
+                error: function(jqXHR){
+                    alert("发生错误：" + jqXHR.status);
+                },
+                xhr: function(){
+                    var xhr = $.ajaxSettings.xhr();
+                    if(onprogress && xhr.upload) {
+                        xhr.upload.addEventListener("progress" , onprogress, false);
+                    return xhr;
+                    }
+                }
+            });
+        }
+
+        /**
+            * 侦查附件上传情况 ,这个方法大概0.05-0.1秒执行一次
+        */
+        function onprogress(evt){
+            var loaded = evt.loaded;     //已经上传大小情况 
+            var tot = evt.total;      //附件总大小 
+            var per = Math.floor(100*loaded/tot);  //已经上传的百分比 
+            $("#progressBar").html( "已经上传完成 "+ per +" %" );
+            $("#progressBar").css("width" , per +"%");
+        }
+    </script>
+    <script language=Javascript> 
+        function time(){
+            t_div = document.getElementById('showtime');
+            var now=new Date()
+            t_div.innerHTML = "  "+now.getFullYear()
+                                +"年"+(now.getMonth()+1)+"月"+now.getDate()
+                                +"日"+now.getHours()+"时"+now.getMinutes()
+                                +"分"+now.getSeconds()+"秒";
+            TimeFlag=now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate()
+                                +" "+now.getHours()+":"+now.getMinutes()
+                                +":"+now.getSeconds();
+            //等待一秒钟后调用time方法，由于settimeout在time方法内，所以可以无限调用
+            setTimeout(time,1000);
+            if(Date.parse("{$Deadline}")<Date.parse(TimeFlag)){
+                $("#uploadData").hide();
+            }
+            }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            if("{$Is_Need_Example}"=="未提供"){
+                $("#ExampleDownload").hide();
+            }
+            if("{$Is_Need_Attachment}"=="未提供"){
+                $("#AttachmentDownload").hide();
+            }
+    });
+</script>
+</body>
+</html>

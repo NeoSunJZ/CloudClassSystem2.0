@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta http-equiv="Pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta http-equiv="Expires" content="0"> 
+<title>中南大学(软件学院)班级事务云注册</title>
+<meta name="description" content="">
+<meta name="author" content="Dr.NeoSunJZ 中南ECHO软件开发工作室">
+<!--
+
+作者：ECHO工作室孙家正
+版本号：Ver 2.0.5
+完成时间：2018/5/17
+
+-->
+         
+<!--个性化CSS样式-->  
+<link rel="stylesheet" href="{$Think.config.web_res_root}assets/css/register.css" type="text/css" />
+<!--安装bootstrap环境-->  
+<!-- Bootstrap 核心 CSS 文件 -->  
+<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">  
+<!--font-awesome 核心我CSS 文件-->  
+<link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">  
+<!-- 在bootstrap.min.js 之前引入 -->  
+<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>  
+<!-- Bootstrap 核心 JavaScript 文件 -->  
+<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!--菜鸟教程提供的CDN 引入jQuery Validate-->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<!--本地化jQuery Validate-->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+<!--个性化校验JS-->
+<script src="{$Think.config.web_res_root}assets/js/login/RegisterCheck.js"></script>
+<script src="{$Think.config.web_res_root}assets/js/login/PasswordCheck.js"></script>
+
+</head>
+<body>
+	<img src="{$Think.config.web_res_root}assets/images/logo/CSU-logo.png" width="240px">
+	<div class="container">
+		<div class="form row">  
+            <form class="form-horizontal col-sm-offset-3 col-md-offset-3" id="register_form" action="{:url('register/doregister')}" method="post">
+                <h3 class="form-title">注册你的班级事务云账户</h3>   
+                    <div class="form-group row " style="margin-bottom: 0px; font-size: 16px;">
+                    	<div class="col-sm-6 col-md-6">    
+                        	<i class="fa fa-user fa-lg"></i>  
+                        	<input class="form-control required" type="text" placeholder="您校园卡的10位学号" name="student_id" id="student_id" autofocus="autofocus" onblur="checkStudentID()" />
+                        	<p>注意：同一学号不得重复注册多个账户，若您忘记密码，请使用找回密码找回，或联系您所在班级的学习委员。</p>
+                        </div>
+                        <div class="col-sm-4 col-md-4 input_box">
+                        	<div id="ShowCheakStudentID"></div>
+                        	<p>*请输入您的校园卡10位数学号。</p>
+                        </div> 
+                    </div>
+                    <div class="form-group row">
+                    	<div class="col-sm-6 col-md-6">    
+                        	<i class="fa fa-street-view fa-lg"></i>  
+                            <input class="form-control required" type="text" placeholder="您的真实姓名" name="truename" id="truename" onblur="checkTruename()"/> 
+                        </div>
+                        <div class="col-sm-4 col-md-4 input_box">
+                        	<div id="ShowCheckTruename"></div>
+                        	<P>*请输入您的真实姓名，否则无法通过审核。</P>
+                        </div>  
+                    </div>
+                    <div class="form-group row">
+                    	<div class="col-sm-2 col-md-2"> 
+                    		<i class="fa fa-graduation-cap fa-lg"></i>     
+                            <input class="form-control required" id="Department" readonly="readonly" type="text" placeholder="学院名称" name="Department"/>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                        	<i class="fa fa-building fa-lg"></i> 
+                            <input class="form-control required" id="Grade" readonly="readonly" type="text" placeholder="年级" name="Grade"/>
+                        </div>
+                        <div class="col-sm-2 col-md-2"> 
+                        	<i class="fa fa-home fa-lg"></i>
+                            <input class="form-control required" id="Classroom" readonly="readonly" type="text" placeholder="班级" name="Classroom"/>
+                        </div>
+                        <div class="col-sm-4 col-md-4 input_box">
+                        	<P>*将根据学号自动产生，若存在问题请核实您的学号是否输入正确或联系管理员。</P>
+                        </div>  
+                    </div>
+                    <div class="form-group row">
+                    	<div class="col-sm-6 col-md-6">    
+                        	<i class="fa fa-lock fa-lg"></i>  
+                            <input class="form-control required" type="password" placeholder="长度不低于6位的密码" id="password" name="password" onKeyUp="CheckIntensity(this.value)"/>
+                        </div>
+                        <div class="col-sm-4 col-md-4 input_box">
+                        	<div id="ShowCheakPW"></div>
+							<table border="0" cellpadding="0" cellspacing="0"> 
+ 								<tr align="center"> 
+ 									<td>密码强度：</td>
+  									<td id="pwd_Weak" class="pwd pwd_c"> </td> 
+  									<td id="pwd_Medium" class="pwd pwd_c pwd_f">无</td> 
+  									<td id="pwd_Strong" class="pwd pwd_c pwd_c_r"> </td> 
+ 								</tr> 
+							</table> 
+                        </div>  
+                    </div>
+                    <div class="form-group row">
+                    	<div class="col-sm-6 col-md-6">    
+                        	<i class="fa fa-check fa-lg"></i>  
+                            <input class="form-control required" type="password" placeholder="请再次确认上面的密码" id="rpassword" name="rpassword" onblur="checkRpassword()"/> 
+                        </div>
+                        <div class="col-sm-4 col-md-4 input_box">
+                        	<div id="ShowCheckRpassword"></div>
+                        	<P>*请再次输入一遍您的密码</P>
+                        </div>  
+                    </div>
+                    <div class="form-group row">
+                    	<div class="col-sm-6 col-md-6">
+                        	<i class="fa fa-envelope fa-lg"></i>  
+                            <input class="form-control eamil" type="text" placeholder="Email" id="email" name="email" onblur="checkEmail()"/>
+                        </div>
+                        <div class="col-sm-4 col-md-4 input_box">
+                        	<div id="ShowCheckEmail"></div>
+                        	<P>*请绑定用户邮箱以接收作业任务提醒和找回密码。(事务提醒可在设置中选择关闭)</P>
+                        </div>  
+                    </div>
+                <div class="col-sm-10 col-md-10"> 
+                    <div class="form-group"> 
+                    	<INPUT class="btn_r btn-info pull-left" id="back_btn" onclick="history.go(-1)" type="button" value="返回登录"/>
+                    	<INPUT class="btn_r btn-success pull-right" id="back_btn" onclick="Reg_submit()" type="button" value="现在注册"/>
+                    </div>  
+                </div>
+            </form> 
+        </div> 
+    </div> 
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta http-equiv="Pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta http-equiv="Expires" content="0"> 
+<title>中南大学(软件学院)班级事务云登录</title>
+<meta name="description" content="">
+<meta name="author" content="Dr.NeoSunJZ 中南ECHO软件开发工作室">
+<!--
+
+作者：ECHO工作室孙家正
+版本号：Ver 2.0.5
+完成时间：2018/5/17
+
+-->
+         
+<!--个性化CSS样式-->  
+<link rel="stylesheet" href="{$Think.config.web_res_root}assets/css/login.css" type="text/css" />
+<!--安装bootstrap环境-->  
+<!-- Bootstrap 核心 CSS 文件 -->  
+<link href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">  
+<!--font-awesome 核心CSS 文件-->  
+<link href="http://cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">  
+<!-- 在bootstrap.min.js 之前引入 -->  
+<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>  
+<!-- Bootstrap 核心 JavaScript 文件 -->  
+<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!--菜鸟教程提供的CDN 引入jQuery Validate-->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<!--本地化jQuery Validate-->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+<script src="{$Think.config.web_res_root}assets/js/Login/RemberPW.js"></script>
+</head>
+
+<body>
+<div class="container">
+<!--LOGO图片-->  
+<div style="margin: 20px;"><img src="{$Think.config.web_res_root}assets/images/logo/logo.png" width="1024"/></div>
+<!--登录页面主体区域-->  
+<div class="login_box">
+  <!--左侧大图-->  
+      <div class="login_l_img"><img src="{$Think.config.web_res_root}assets/images/login/login-img.png" /></div>
+  <div class="login">
+    <!--右侧登录用户图标-->  
+          <div class="login_logo"><a href="#"><img src="{$Think.config.web_res_root}assets/images/login/login_logo.png" /></a></div>
+        <!--登录模块-->
+        <div class="form row" style="text-align: left;">
+          <!--标题-->  
+          <h4 class="form-title" style="text-align: center; margin-top: 20px;">班级事务云登录</h4> 
+          <!--登录表单-->  
+            <form class="form-horizontal col-sm-offset-0 col-md-offset-0" id="login_form" action="{:url('login/dologin')}" method="post" name="form1">
+                <div class="col-sm-12 col-md-12"> 
+                    <!--学生学号和密码模块-->   
+                    <div class="form-group" style="margin:0px;">  
+                        <i class="fa fa-user fa-lg"></i>  
+                        <input class="form-control" type="text" placeholder="学生学号" name="name" id="studentid" autofocus="autofocus" maxlength="20" required oninvalid="setCustomValidity('请输入您的学生学号');" oninput="setCustomValidity('');"/>  
+                    </div>  
+                    <div class="form-group" style="margin:0px;">  
+                            <i class="fa fa-lock fa-lg"></i>  
+                            <input class="form-control" type="password" placeholder="个人密码" name="password" id="password" maxlength="20" required oninvalid="setCustomValidity('请输入您的密码（首次登录密码为学号）');" oninput="setCustomValidity('');"/>  
+                    </div> 
+                    <!--验证码模块-->  
+                    <div class="form-group" style="margin:0px;">  
+                      <div class="row">
+                        <div class="col-sm-7 col-md-7">  
+                            <i class="fa fa-check fa-lg"></i>  
+                            <input class="form-control" type="text" placeholder="验证码" name="captcha" maxlength="4" required oninvalid="setCustomValidity('请输入验证码（点击图片刷新）');" oninput="setCustomValidity('');"/>  
+                        </div>
+                        <div class="col-sm-5 col-md-5" style="padding:0px; margin-top:14px;">
+                            <img class="captcha_img" src="{:captcha_src()}" alt="captcha" onclick="javascript:this.src='{:captcha_src()}?tm='+Math.random();" style="cursor: pointer"/>
+                        </div>
+                      </div>
+                    </div>
+                    <!--其他模块-->  
+                    <div class="form-group" style="margin-top:5px; margin-bottom: 0px;">  
+                        <label class="checkbox"> 
+                            <input type="checkbox" name="remember" id="isRmbPwd" value="1"/> 记住此用户  
+                        </label>
+                        <hr style="height: 1px; margin: 10px;"/> 
+                        <div class="row">
+                          <div class="col-sm-6 col-md-6"> 
+                            <a href="{$Think.config.web_root}login/register/register" id="register_btn" class="">注册新用户</a> 
+                          </div>
+                          <div class="col-sm-6 col-md-6" style="text-align: right;"> 
+                            <a href="javascript:;" id="register_btn" class="">找回密码</a> 
+                          </div> 
+                          <div class="col-sm-12 col-md-12" style="margin-top: 5px;"> 
+                              *用户首次登录密码为本人学号，请立刻修改。
+                          </div>
+                          <div class="col-sm-12 col-md-12"> 
+                              *注册用户请联系本班学习委员审核。
+                          </div>
+                        </div>
+                    </div>  
+                    <!--登录按钮-->  
+                    <div class="form-group" style="margin-top: 10px;">  
+                        <input type="submit" class="btn btn-success pull-right" value="登录" onclick="Rember()"/>     
+                    </div>  
+                </div>  
+            </form>  
+        </div>      
+  </div>
+</div>
+</div>
+      <!--版权所有信息-->  
+      <div class="copyright">
+      <div>中南ECHO软件开发工作室 版权所有©2017-2018 技术支持电话：13305356699</div>
+      <div>版本号：V1.3.0.0 （内部开发版，存在BUG是正常的，我们怎么会解决掉制造BUG的人呢，这辈子都不可能的。）</div>
+</div>
+ <script>
+        if(window.top!==window.self){window.top.location=window.location};
+ </script>
+</body>
+</html>
